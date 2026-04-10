@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client"
+  output = "../src/generated/prisma"
+}
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  adminLogs     AdminLog[]
+  notifications Notification[]
+  profile       UserProfile?
+  roles         UserRole[]
+}
+
+model UserProfile {
+  id        String    @id @default(uuid())
+  userId    String    @unique
+  firstName String?
+  lastName  String?
+  phone     String?
+  gender    String?
+  dob       DateTime?
+  address   String?
+  bio       String?
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Role {
+  id    Int        @id @default(autoincrement())
+  name  String     @unique
+  users UserRole[]
+}
+
+model UserRole {
+  id     Int    @id @default(autoincrement())
+  userId String
+  roleId Int
+  role   Role   @relation(fields: [roleId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, roleId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model AdminLog {
+  id          String   @id @default(uuid())
+  adminId     String
+  action      String
+  targetTable String
+  targetId    String?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+  admin       User     @relation(fields: [adminId], references: [id])
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String?  @unique
+  createdAt DateTime @default(now())
+  courses   Course[]
+}
+
+model Course {
+  id              String       @id @default(uuid())
+  categoryId      String
+  title           String
+  slug            String?      @unique
+  briefDefinition String
+  prerequisite    String?
+  keyAreas        String[]
+  outcomes        String[]
+  jobRoles        String[]
+  industries      String[]
+  duration        String?
+  cost            Int?
+  paid            Boolean
+  thumbnail       String?
+  status          CourseStatus @default(draft)
+  level           CourseLevel
+  createdBy       String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  category        Category     @relation(fields: [categoryId], references: [id])
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+enum CourseStatus {
+  draft
+  published
+  archived
+}
+
+enum CourseLevel {
+  beginner
+  intermediate
+  advanced
+}
