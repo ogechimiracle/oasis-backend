@@ -1,8 +1,11 @@
-import { getCourseById, getCourses, SaveContactMessage } from "./user.service";
-export const CourseById = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ContactMessage = exports.getActiveCourse = exports.CourseById = void 0;
+const user_service_1 = require("./user.service");
+const CourseById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await getCourseById(id);
+        const result = await (0, user_service_1.getCourseById)(id);
         res.status(200).json({
             data: result, success: true
         });
@@ -13,9 +16,10 @@ export const CourseById = async (req, res) => {
         });
     }
 };
-export const getActiveCourse = async (req, res) => {
+exports.CourseById = CourseById;
+const getActiveCourse = async (req, res) => {
     try {
-        const courses = await getCourses();
+        const courses = await (0, user_service_1.getCourses)();
         res.status(200).json({
             data: courses, success: true
         });
@@ -26,10 +30,11 @@ export const getActiveCourse = async (req, res) => {
         });
     }
 };
-export const ContactMessage = async (req, res) => {
+exports.getActiveCourse = getActiveCourse;
+const ContactMessage = async (req, res) => {
     try {
         const { name, email, subject, message } = req.body;
-        const result = await SaveContactMessage({ name, email, subject, message });
+        const result = await (0, user_service_1.SaveContactMessage)({ name, email, subject, message });
         res.status(200).json({
             message: "Message Successfully Sent",
             success: true,
@@ -41,3 +46,4 @@ export const ContactMessage = async (req, res) => {
         });
     }
 };
+exports.ContactMessage = ContactMessage;

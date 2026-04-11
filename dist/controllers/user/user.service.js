@@ -1,6 +1,9 @@
-import { prisma } from "../../lib/prisma";
-export const getCourseById = async (courseId) => {
-    const course = await prisma.course.findUnique({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SaveContactMessage = exports.getCourses = exports.getCourseById = void 0;
+const prisma_1 = require("../../lib/prisma");
+const getCourseById = async (courseId) => {
+    const course = await prisma_1.prisma.course.findUnique({
         where: { id: courseId },
         include: {
             category: true,
@@ -8,15 +11,17 @@ export const getCourseById = async (courseId) => {
     });
     return course;
 };
-export const getCourses = async () => {
-    const courses = await prisma.course.findMany({
+exports.getCourseById = getCourseById;
+const getCourses = async () => {
+    const courses = await prisma_1.prisma.course.findMany({
         where: { status: "published" },
         include: { category: true }
     });
     return courses;
 };
-export const SaveContactMessage = async (data) => {
-    const contact = await prisma.contact.create({
+exports.getCourses = getCourses;
+const SaveContactMessage = async (data) => {
+    const contact = await prisma_1.prisma.contact.create({
         data: {
             name: data.name,
             email: data.email,
@@ -26,3 +31,4 @@ export const SaveContactMessage = async (data) => {
     });
     return contact;
 };
+exports.SaveContactMessage = SaveContactMessage;

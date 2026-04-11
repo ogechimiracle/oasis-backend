@@ -1,9 +1,12 @@
-import { z } from 'zod';
-export const registerSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6).max(15),
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginSchema = exports.registerSchema = void 0;
+const zod_1 = require("zod");
+exports.registerSchema = zod_1.z.object({
+    email: zod_1.z.string().email(),
+    password: zod_1.z.string().min(6).max(15),
 });
-export const loginSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6).max(15),
+exports.loginSchema = zod_1.z.object({
+    email: zod_1.z.string().email(),
+    password: zod_1.z.string().min(6).max(15),
 });

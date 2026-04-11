@@ -1,9 +1,14 @@
-import { Router } from 'express';
-import authRouter from '../controllers/auth/auth.route';
-import adminRouter from '../controllers/admin/admin.route';
-import userRouter from '../controllers/user/user.route';
-const router = Router();
-router.use('/auth', authRouter);
-router.use('/admin', adminRouter);
-router.use('/users', userRouter);
-export default router;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_route_1 = __importDefault(require("../controllers/auth/auth.route"));
+const admin_route_1 = __importDefault(require("../controllers/admin/admin.route"));
+const user_route_1 = __importDefault(require("../controllers/user/user.route"));
+const router = (0, express_1.Router)();
+router.use('/auth', auth_route_1.default);
+router.use('/admin', admin_route_1.default);
+router.use('/users', user_route_1.default);
+exports.default = router;

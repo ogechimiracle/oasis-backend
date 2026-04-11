@@ -1,7 +1,10 @@
-import { assignRoleService, addCategory, getCategory, getCourse, addCourse, activateCourse, deleteCourse, adminGetCourseById, adminGetPendingCourses, adminGetArchivedCourses, adminGetContactMessages, adminGetStatistics } from "./admin.service";
-export const getStat = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getContacts = exports.getArchivedCourses = exports.getPendingCourses = exports.adminCourseById = exports.delCourse = exports.publishCourse = exports.createCourse = exports.getCourses = exports.getCourseCategory = exports.addCoursCategory = exports.assignRoleController = exports.getStat = void 0;
+const admin_service_1 = require("./admin.service");
+const getStat = async (req, res) => {
     try {
-        const stats = await adminGetStatistics();
+        const stats = await (0, admin_service_1.adminGetStatistics)();
         res.status(200).json({
             stats,
             success: true
@@ -13,10 +16,11 @@ export const getStat = async (req, res) => {
         });
     }
 };
-export const assignRoleController = async (req, res) => {
+exports.getStat = getStat;
+const assignRoleController = async (req, res) => {
     try {
         const { userId, roleName } = req.body;
-        const result = await assignRoleService(userId, roleName);
+        const result = await (0, admin_service_1.assignRoleService)(userId, roleName);
         res.status(200).json({
             message: "Role assigned successfully",
             data: result,
@@ -28,10 +32,11 @@ export const assignRoleController = async (req, res) => {
         });
     }
 };
-export const addCoursCategory = async (req, res) => {
+exports.assignRoleController = assignRoleController;
+const addCoursCategory = async (req, res) => {
     try {
         const { name, slug } = req.body;
-        const result = await addCategory(name, slug);
+        const result = await (0, admin_service_1.addCategory)(name, slug);
         res.status(200).json({
             message: "Category Successfully Added",
             data: result,
@@ -44,9 +49,10 @@ export const addCoursCategory = async (req, res) => {
         });
     }
 };
-export const getCourseCategory = async (req, res) => {
+exports.addCoursCategory = addCoursCategory;
+const getCourseCategory = async (req, res) => {
     try {
-        const resut = await getCategory();
+        const resut = await (0, admin_service_1.getCategory)();
         res.status(200).json({
             data: resut,
             success: true
@@ -58,9 +64,10 @@ export const getCourseCategory = async (req, res) => {
         });
     }
 };
-export const getCourses = async (req, res) => {
+exports.getCourseCategory = getCourseCategory;
+const getCourses = async (req, res) => {
     try {
-        const courses = await getCourse();
+        const courses = await (0, admin_service_1.getCourse)();
         res.status(200).json({
             data: courses,
             success: true
@@ -72,14 +79,15 @@ export const getCourses = async (req, res) => {
         });
     }
 };
-export const createCourse = async (req, res) => {
+exports.getCourses = getCourses;
+const createCourse = async (req, res) => {
     try {
         const file = req.file;
         const data = {
             ...req.body,
             thumbnail: file?.filename || undefined,
         };
-        const course = await addCourse(data);
+        const course = await (0, admin_service_1.addCourse)(data);
         res.status(201).json({
             message: "Course created successfully",
             data: course,
@@ -92,10 +100,11 @@ export const createCourse = async (req, res) => {
         });
     }
 };
-export const publishCourse = async (req, res) => {
+exports.createCourse = createCourse;
+const publishCourse = async (req, res) => {
     try {
         const { id } = req.params;
-        const course = await activateCourse(id);
+        const course = await (0, admin_service_1.activateCourse)(id);
         res.status(200).json({
             message: "Course published successfully",
             data: course,
@@ -108,10 +117,11 @@ export const publishCourse = async (req, res) => {
         });
     }
 };
-export const delCourse = async (req, res) => {
+exports.publishCourse = publishCourse;
+const delCourse = async (req, res) => {
     try {
         const { id } = req.params;
-        const course = await deleteCourse(id);
+        const course = await (0, admin_service_1.deleteCourse)(id);
         res.status(200).json({
             message: "Course deleted successfully",
             data: course,
@@ -124,10 +134,11 @@ export const delCourse = async (req, res) => {
         });
     }
 };
-export const adminCourseById = async (req, res) => {
+exports.delCourse = delCourse;
+const adminCourseById = async (req, res) => {
     try {
         const { id } = req.params;
-        const result = await adminGetCourseById(id);
+        const result = await (0, admin_service_1.adminGetCourseById)(id);
         res.status(200).json({
             data: result, success: true
         });
@@ -138,9 +149,10 @@ export const adminCourseById = async (req, res) => {
         });
     }
 };
-export const getPendingCourses = async (req, res) => {
+exports.adminCourseById = adminCourseById;
+const getPendingCourses = async (req, res) => {
     try {
-        const courses = await adminGetPendingCourses();
+        const courses = await (0, admin_service_1.adminGetPendingCourses)();
         res.status(200).json({
             data: courses,
             success: true
@@ -152,9 +164,10 @@ export const getPendingCourses = async (req, res) => {
         });
     }
 };
-export const getArchivedCourses = async (req, res) => {
+exports.getPendingCourses = getPendingCourses;
+const getArchivedCourses = async (req, res) => {
     try {
-        const courses = await adminGetArchivedCourses();
+        const courses = await (0, admin_service_1.adminGetArchivedCourses)();
         res.status(200).json({
             data: courses,
             success: true
@@ -166,9 +179,10 @@ export const getArchivedCourses = async (req, res) => {
         });
     }
 };
-export const getContacts = async (req, res) => {
+exports.getArchivedCourses = getArchivedCourses;
+const getContacts = async (req, res) => {
     try {
-        const contact = await adminGetContactMessages();
+        const contact = await (0, admin_service_1.adminGetContactMessages)();
         res.status(200).json({
             data: contact,
             success: true
@@ -180,3 +194,4 @@ export const getContacts = async (req, res) => {
         });
     }
 };
+exports.getContacts = getContacts;

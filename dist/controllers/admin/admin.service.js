@@ -1,9 +1,12 @@
-import { prisma } from "../../lib/prisma";
-export const adminGetStatistics = async () => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.adminGetContactMessages = exports.adminGetArchivedCourses = exports.adminGetPendingCourses = exports.adminGetCourseById = exports.deleteCourse = exports.activateCourse = exports.addCourse = exports.getCourse = exports.getCategory = exports.addCategory = exports.assignRoleService = exports.adminGetStatistics = void 0;
+const prisma_1 = require("../../lib/prisma");
+const adminGetStatistics = async () => {
     const [totalUsers, totalCourses, totalCategories] = await Promise.all([
-        prisma.user.count(),
-        prisma.course.count(),
-        prisma.category.count(),
+        prisma_1.prisma.user.count(),
+        prisma_1.prisma.course.count(),
+        prisma_1.prisma.category.count(),
     ]);
     return {
         totalUsers,
@@ -11,16 +14,17 @@ export const adminGetStatistics = async () => {
         totalCategories
     };
 };
-export const assignRoleService = async (userId, roleName) => {
+exports.adminGetStatistics = adminGetStatistics;
+const assignRoleService = async (userId, roleName) => {
     // find role
-    const role = await prisma.role.findUnique({
+    const role = await prisma_1.prisma.role.findUnique({
         where: { name: roleName },
     });
     if (!role) {
         throw new Error("Role not found");
     }
     // check if already assigned
-    const existingRole = await prisma.userRole.findUnique({
+    const existingRole = await prisma_1.prisma.userRole.findUnique({
         where: {
             userId_roleId: {
                 userId,
@@ -32,7 +36,7 @@ export const assignRoleService = async (userId, roleName) => {
         throw new Error("User already has this role");
     }
     // assign role
-    const userRole = await prisma.userRole.create({
+    const userRole = await prisma_1.prisma.userRole.create({
         data: {
             userId,
             roleId: role.id,
@@ -43,28 +47,32 @@ export const assignRoleService = async (userId, roleName) => {
     });
     return userRole;
 };
-export const addCategory = async (name, slug) => {
-    const existingCategory = await prisma.category.findFirst({
+exports.assignRoleService = assignRoleService;
+const addCategory = async (name, slug) => {
+    const existingCategory = await prisma_1.prisma.category.findFirst({
         where: { name },
     });
     if (existingCategory) {
         throw new Error("Category already exists");
     }
-    const category = await prisma.category.create({
+    const category = await prisma_1.prisma.category.create({
         data: { name, slug },
     });
     return category;
 };
-export const getCategory = async () => {
-    const category = await prisma.category.findMany();
+exports.addCategory = addCategory;
+const getCategory = async () => {
+    const category = await prisma_1.prisma.category.findMany();
     return category;
 };
-export const getCourse = async () => {
-    const course = await prisma.course.findMany();
+exports.getCategory = getCategory;
+const getCourse = async () => {
+    const course = await prisma_1.prisma.course.findMany();
     return course;
 };
-export const addCourse = async (data) => {
-    const course = await prisma.course.create({
+exports.getCourse = getCourse;
+const addCourse = async (data) => {
+    const course = await prisma_1.prisma.course.create({
         data: {
             categoryId: data.category, // 🔥 important mapping
             title: data.title,
@@ -85,8 +93,9 @@ export const addCourse = async (data) => {
     });
     return course;
 };
-export const activateCourse = async (id) => {
-    const course = await prisma.course.update({
+exports.addCourse = addCourse;
+const activateCourse = async (id) => {
+    const course = await prisma_1.prisma.course.update({
         where: { id },
         data: {
             status: "published"
@@ -94,33 +103,39 @@ export const activateCourse = async (id) => {
     });
     return course;
 };
-export const deleteCourse = async (id) => {
-    const course = await prisma.course.delete({
+exports.activateCourse = activateCourse;
+const deleteCourse = async (id) => {
+    const course = await prisma_1.prisma.course.delete({
         where: { id }
     });
     return course;
 };
-export const adminGetCourseById = async (id) => {
-    const course = await prisma.course.findUnique({
+exports.deleteCourse = deleteCourse;
+const adminGetCourseById = async (id) => {
+    const course = await prisma_1.prisma.course.findUnique({
         where: { id },
     });
     return course;
 };
-export const adminGetPendingCourses = async () => {
-    const courses = await prisma.course.findMany({
+exports.adminGetCourseById = adminGetCourseById;
+const adminGetPendingCourses = async () => {
+    const courses = await prisma_1.prisma.course.findMany({
         where: { status: "draft" },
         include: { category: true }
     });
     return courses;
 };
-export const adminGetArchivedCourses = async () => {
-    const courses = await prisma.course.findMany({
+exports.adminGetPendingCourses = adminGetPendingCourses;
+const adminGetArchivedCourses = async () => {
+    const courses = await prisma_1.prisma.course.findMany({
         where: { status: "archived" },
         include: { category: true }
     });
     return courses;
 };
-export const adminGetContactMessages = async () => {
-    const contacts = await prisma.contact.findMany();
+exports.adminGetArchivedCourses = adminGetArchivedCourses;
+const adminGetContactMessages = async () => {
+    const contacts = await prisma_1.prisma.contact.findMany();
     return contacts;
 };
+exports.adminGetContactMessages = adminGetContactMessages;

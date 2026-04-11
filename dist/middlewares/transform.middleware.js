@@ -1,4 +1,7 @@
-export const transformCourseData = (req, res, next) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.transformCourseData = void 0;
+const transformCourseData = (req, res, next) => {
     const safeParseArray = (value) => {
         try {
             return typeof value === "string" ? JSON.parse(value) : value;
@@ -29,3 +32,4 @@ export const transformCourseData = (req, res, next) => {
     };
     next();
 };
+exports.transformCourseData = transformCourseData;

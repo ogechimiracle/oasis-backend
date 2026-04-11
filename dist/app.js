@@ -1,18 +1,23 @@
-import express from "express";
-import routes from "./routes/index";
-import cors from "cors";
-const app = express();
-app.use(cors());
-app.use(cors({
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const index_1 = __importDefault(require("./routes/index"));
+const cors_1 = __importDefault(require("cors"));
+const app = (0, express_1.default)();
+app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 }));
-app.use(express.json());
-app.use("/api", routes);
-app.use('/uploads', express.static("uploads"));
+app.use(express_1.default.json());
+app.use("/api", index_1.default);
+app.use('/uploads', express_1.default.static("uploads"));
 app.get("/", (req, res) => {
     res.send("Integrated OASIS api running 🚀");
 });
-export default app;
+exports.default = app;

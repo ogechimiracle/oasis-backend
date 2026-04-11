@@ -1,16 +1,20 @@
-import { registerUser, loginUser } from "./auth.service";
-export const register = async (req, res) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.login = exports.register = void 0;
+const auth_service_1 = require("./auth.service");
+const register = async (req, res) => {
     try {
-        const user = await registerUser(req.body);
+        const user = await (0, auth_service_1.registerUser)(req.body);
         res.status(201).json({ message: "User registered", user: user.email, success: true });
     }
     catch (err) {
         res.status(400).json({ message: err.message, success: false });
     }
 };
-export const login = async (req, res) => {
+exports.register = register;
+const login = async (req, res) => {
     try {
-        const { token, user } = await loginUser(req.body);
+        const { token, user } = await (0, auth_service_1.loginUser)(req.body);
         res.json({ token, user: {
                 id: user.id,
                 email: user.email,
@@ -22,3 +26,4 @@ export const login = async (req, res) => {
         res.status(400).json({ message: err.message, success: false });
     }
 };
+exports.login = login;
