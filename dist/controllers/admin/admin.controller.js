@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getContacts = exports.getArchivedCourses = exports.getPendingCourses = exports.adminCourseById = exports.delCourse = exports.publishCourse = exports.createCourse = exports.getCourses = exports.getCourseCategory = exports.addCoursCategory = exports.assignRoleController = exports.getStat = void 0;
+exports.getContacts = exports.getArchivedCourses = exports.UpdateCourse = exports.getPendingCourses = exports.adminCourseById = exports.delCourse = exports.publishCourse = exports.createCourse = exports.getCourses = exports.getCourseCategory = exports.addCoursCategory = exports.assignRoleController = exports.getStat = void 0;
 const admin_service_1 = require("./admin.service");
+const cloudinary_service_1 = require("./cloudinary.service");
+const prisma_1 = require("../../lib/prisma");
 const getStat = async (req, res) => {
     try {
         const stats = await (0, admin_service_1.adminGetStatistics)();
@@ -83,9 +85,13 @@ exports.getCourses = getCourses;
 const createCourse = async (req, res) => {
     try {
         const file = req.file;
+        let thumbnailUrl;
+        if (file) {
+            thumbnailUrl = await (0, cloudinary_service_1.uploadToCloudinary)(file.buffer);
+        }
         const data = {
             ...req.body,
-            thumbnail: file?.filename || undefined,
+            thumbnail: thumbnailUrl || undefined,
         };
         const course = await (0, admin_service_1.addCourse)(data);
         res.status(201).json({
@@ -165,6 +171,46 @@ const getPendingCourses = async (req, res) => {
     }
 };
 exports.getPendingCourses = getPendingCourses;
+const UpdateCourse = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const file = req.file;
+        const courseId = Array.isArray(id) ? id[0] : id;
+        const parsedData = req.body?.data ? JSON.parse(req.body.data) : {};
+        // console.log(courseId)
+        // console.log(parsedData)
+        const existingCourse = await prisma_1.prisma.course.findUnique({
+            where: { id: courseId },
+        });
+        if (!existingCourse) {
+            return res.status(404).json({
+                success: false,
+                message: "Course not found",
+            });
+        }
+        let thumbnail = existingCourse.thumbnail;
+        if (file) {
+            thumbnail = await (0, cloudinary_service_1.uploadToCloudinary)(file.buffer);
+        }
+        const data = {
+            ...parsedData,
+            thumbnail,
+        };
+        const course = await (0, admin_service_1.updateCourse)(courseId, data);
+        res.status(200).json({
+            success: true,
+            message: "Course updated successfully",
+            data: course,
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+exports.UpdateCourse = UpdateCourse;
 const getArchivedCourses = async (req, res) => {
     try {
         const courses = await (0, admin_service_1.adminGetArchivedCourses)();

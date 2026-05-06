@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.adminGetContactMessages = exports.adminGetArchivedCourses = exports.adminGetPendingCourses = exports.adminGetCourseById = exports.deleteCourse = exports.activateCourse = exports.addCourse = exports.getCourse = exports.getCategory = exports.addCategory = exports.assignRoleService = exports.adminGetStatistics = void 0;
+exports.adminGetContactMessages = exports.adminGetArchivedCourses = exports.adminGetPendingCourses = exports.adminGetCourseById = exports.updateCourse = exports.deleteCourse = exports.activateCourse = exports.addCourse = exports.getCourse = exports.getCategory = exports.addCategory = exports.assignRoleService = exports.adminGetStatistics = void 0;
 const prisma_1 = require("../../lib/prisma");
 const adminGetStatistics = async () => {
     const [totalUsers, totalCourses, totalCategories] = await Promise.all([
@@ -111,6 +111,29 @@ const deleteCourse = async (id) => {
     return course;
 };
 exports.deleteCourse = deleteCourse;
+const updateCourse = async (id, data) => {
+    const course = await prisma_1.prisma.course.update({
+        where: { id },
+        data: {
+            categoryId: data.category,
+            title: data.title,
+            slug: data.slug,
+            briefDefinition: data.briefDefinition,
+            prerequisite: data.prerequisite,
+            keyAreas: data.keyAreas,
+            outcomes: data.outcomes,
+            jobRoles: data.jobRoles,
+            industries: data.industries,
+            duration: data.duration,
+            cost: data.cost,
+            paid: data.paid,
+            thumbnail: data.thumbnail, // overwrite if new file uploaded
+            level: data.level,
+        },
+    });
+    return course;
+};
+exports.updateCourse = updateCourse;
 const adminGetCourseById = async (id) => {
     const course = await prisma_1.prisma.course.findUnique({
         where: { id },

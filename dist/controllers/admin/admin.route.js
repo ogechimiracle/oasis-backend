@@ -14,6 +14,7 @@ adminRouter.get('/getCategory', admin_controller_1.getCourseCategory);
 adminRouter.get('/getCourse', admin_controller_1.getCourses);
 adminRouter.post('/addCourse', upload_middleware_1.upload.single('thumbnail'), transform_middleware_1.transformCourseData, (0, validate_1.validate)(course_schema_1.courseValidation), admin_controller_1.createCourse);
 adminRouter.put('/publishCourse/:id', admin_controller_1.publishCourse);
+adminRouter.put('/updateCourse/:id', upload_middleware_1.upload.single("thumbnail"), admin_controller_1.UpdateCourse);
 adminRouter.delete('/deleteCourse/:id', admin_controller_1.delCourse);
 adminRouter.get('/courseById/:id', admin_controller_1.adminCourseById);
 adminRouter.get('/pendingCourses', admin_controller_1.getPendingCourses);
