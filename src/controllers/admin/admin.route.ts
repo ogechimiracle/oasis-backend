@@ -1,10 +1,10 @@
 import {Router} from 'express'
-import { assignRoleController, addCoursCategory, getCourseCategory, createCourse, getCourses, publishCourse, delCourse, adminCourseById, getPendingCourses, getArchivedCourses, getContacts, getStat } from './admin.controller'
+import { assignRoleController, addCoursCategory, getCourseCategory, createCourse, getCourses, publishCourse, delCourse, adminCourseById, getPendingCourses, getArchivedCourses, getContacts, getStat, UpdateCourse } from './admin.controller'
 import { validate } from '../../middlewares/validate'
 import { courseValidation } from '../../validations/course.schema'
 import { upload } from '../../middlewares/upload.middleware'
 import { transformCourseData } from '../../middlewares/transform.middleware'
-import { get } from 'node:http'
+
 
 
 const adminRouter = Router()
@@ -16,6 +16,7 @@ adminRouter.get('/getCategory', getCourseCategory)
 adminRouter.get('/getCourse', getCourses)
 adminRouter.post('/addCourse',upload.single('thumbnail'), transformCourseData, validate(courseValidation),  createCourse)
 adminRouter.put('/publishCourse/:id', publishCourse)
+adminRouter.put('/updateCourse/:id', upload.single("thumbnail"), UpdateCourse)
 adminRouter.delete('/deleteCourse/:id', delCourse)
 adminRouter.get('/courseById/:id', adminCourseById)
 adminRouter.get('/pendingCourses', getPendingCourses)

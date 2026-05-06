@@ -130,6 +130,30 @@ export const deleteCourse = async(id:string)=>{
 }
 
 
+export const updateCourse = async (id:any, data:any)=>{
+   const course = await prisma.course.update({
+    where: { id },
+    data: {
+      categoryId: data.category,
+      title: data.title,
+      slug: data.slug,
+      briefDefinition: data.briefDefinition,
+      prerequisite: data.prerequisite,
+      keyAreas: data.keyAreas,
+      outcomes: data.outcomes,
+      jobRoles: data.jobRoles,
+      industries: data.industries,
+      duration: data.duration,
+      cost: data.cost,
+      paid: data.paid,
+      thumbnail: data.thumbnail, // overwrite if new file uploaded
+      level: data.level,
+    },
+  });
+  return course
+}
+
+
 export const adminGetCourseById = async (id:string)=>{
   const course = await prisma.course.findUnique({
     where:{id},
