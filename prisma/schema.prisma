@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client"
   output = "../src/generated/prisma"
+  engineType ="binary"
 }
 datasource db {
   provider = "postgresql"
@@ -16,6 +17,8 @@ model User {
   notifications Notification[]
   profile       UserProfile?
   roles         UserRole[]
+  enrollments   Enrollment[]
+  payments      Payment[]
 }
 
 model UserProfile {
@@ -97,6 +100,7 @@ model Course {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
   category        Category     @relation(fields: [categoryId], references: [id])
+  enrollments   Enrollment[]
 }
 
 model Contact {
@@ -108,6 +112,45 @@ model Contact {
   createdAt DateTime @default(now())
 }
 
+model Enrollment {
+  id           String           @id @default(uuid())
+  userId       String
+  courseId     String
+  status       EnrollmentStatus @default(active)
+  
+  // Duration Tracking
+  enrolledAt   DateTime         @default(now())
+  expiresAt    DateTime?        // Null for lifetime access, or set a date
+  lastAccessed DateTime         @updatedAt
+  progress     Float            @default(0) // 0 to 100 percentage
+  
+  user         User             @relation(fields: [userId], references: [id])
+  course       Course           @relation(fields: [courseId], references: [id])
+  payment      Payment?         // Link to the payment that created this
+
+  // CRITICAL: Prevents double enrollment for the same course
+  @@unique([userId, courseId])
+}
+
+model Payment {
+  id               String        @id @default(uuid())
+  userId           String
+  enrollmentId     String?       @unique // Optional: Link to enrollment after success
+  amount           Int
+  currency         String        @default("NGN")
+  status           PaymentStatus @default(pending)
+  transactionRef   String        @unique // tx_ref from Flutterwave
+  flutterwaveId    String?       @unique // flw_id from Flutterwave response
+  
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  user             User          @relation(fields: [userId], references: [id])
+  enrollment       Enrollment?   @relation(fields: [enrollmentId], references: [id])
+}
+
+
+
 enum CourseStatus {
   draft
   published
@@ -118,4 +161,18 @@ enum CourseLevel {
   beginner
   intermediate
   advanced
+}
+
+
+enum EnrollmentStatus {
+  active
+  completed
+  expired
+  suspended
+}
+
+enum PaymentStatus {
+  pending
+  successful
+  failed
 }

@@ -1,5 +1,5 @@
 
-import { Request, Response } from "express";
+import  { Request, Response } from "express";
 import { registerUser, loginUser } from "./auth.service";
 import { success } from "zod";
 

@@ -184,3 +184,32 @@ export const adminGetContactMessages = async ()=>{
   const contacts = await prisma.contact.findMany()
   return contacts
 }
+
+export const getAdminDashboardStats = async () => {
+  const [totalRevenue, enrollmentCount, recentPayments] = await Promise.all([
+    //  Sum all successful payments
+    prisma.payment.aggregate({
+      where: { status: "successful" },
+      _sum: { amount: true },
+    }),
+    // Count active students
+    prisma.enrollment.count({
+      where: { status: "active" },
+    }),
+    // Get last 10 payments with User and Course details
+    prisma.payment.findMany({
+      take: 10,
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: { select: { email: true, profile: { select: { firstName: true, lastName: true } } } },
+        enrollment: { include: { course: { select: { title: true } } } }
+      }
+    })
+  ]);
+
+  return {
+    revenue: totalRevenue._sum.amount || 0,
+    totalStudents: enrollmentCount,
+    recentPayments
+  };
+};

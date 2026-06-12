@@ -20,4 +20,5 @@ adminRouter.get('/courseById/:id', admin_controller_1.adminCourseById);
 adminRouter.get('/pendingCourses', admin_controller_1.getPendingCourses);
 adminRouter.get('/archivedCourses', admin_controller_1.getArchivedCourses);
 adminRouter.get('/contacts', admin_controller_1.getContacts);
+adminRouter.get('/enrollmentStats', admin_controller_1.getEnrollmentStats);
 exports.default = adminRouter;

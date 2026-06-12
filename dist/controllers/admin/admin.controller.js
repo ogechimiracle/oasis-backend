@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getContacts = exports.getArchivedCourses = exports.UpdateCourse = exports.getPendingCourses = exports.adminCourseById = exports.delCourse = exports.publishCourse = exports.createCourse = exports.getCourses = exports.getCourseCategory = exports.addCoursCategory = exports.assignRoleController = exports.getStat = void 0;
+exports.getEnrollmentStats = exports.getContacts = exports.getArchivedCourses = exports.UpdateCourse = exports.getPendingCourses = exports.adminCourseById = exports.delCourse = exports.publishCourse = exports.createCourse = exports.getCourses = exports.getCourseCategory = exports.addCoursCategory = exports.assignRoleController = exports.getStat = void 0;
 const admin_service_1 = require("./admin.service");
 const cloudinary_service_1 = require("./cloudinary.service");
 const prisma_1 = require("../../lib/prisma");
@@ -241,3 +241,18 @@ const getContacts = async (req, res) => {
     }
 };
 exports.getContacts = getContacts;
+const getEnrollmentStats = async (req, res) => {
+    try {
+        const stats = await (0, admin_service_1.getAdminDashboardStats)();
+        res.status(200).json({
+            data: stats,
+            success: true
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            message: error.message, success: false
+        });
+    }
+};
+exports.getEnrollmentStats = getEnrollmentStats;

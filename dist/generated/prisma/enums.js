@@ -9,7 +9,7 @@
 * 🟢 You can import this file directly.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CourseLevel = exports.CourseStatus = void 0;
+exports.PaymentStatus = exports.EnrollmentStatus = exports.CourseLevel = exports.CourseStatus = void 0;
 exports.CourseStatus = {
     draft: 'draft',
     published: 'published',
@@ -19,4 +19,15 @@ exports.CourseLevel = {
     beginner: 'beginner',
     intermediate: 'intermediate',
     advanced: 'advanced'
+};
+exports.EnrollmentStatus = {
+    active: 'active',
+    completed: 'completed',
+    expired: 'expired',
+    suspended: 'suspended'
+};
+exports.PaymentStatus = {
+    pending: 'pending',
+    successful: 'successful',
+    failed: 'failed'
 };

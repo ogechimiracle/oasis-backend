@@ -1,5 +1,5 @@
 import {Router} from 'express'
-import { assignRoleController, addCoursCategory, getCourseCategory, createCourse, getCourses, publishCourse, delCourse, adminCourseById, getPendingCourses, getArchivedCourses, getContacts, getStat, UpdateCourse } from './admin.controller'
+import { assignRoleController, addCoursCategory, getCourseCategory, createCourse, getCourses, publishCourse, delCourse, adminCourseById, getPendingCourses, getArchivedCourses, getContacts, getStat, UpdateCourse, getEnrollmentStats } from './admin.controller'
 import { validate } from '../../middlewares/validate'
 import { courseValidation } from '../../validations/course.schema'
 import { upload } from '../../middlewares/upload.middleware'
@@ -22,6 +22,7 @@ adminRouter.get('/courseById/:id', adminCourseById)
 adminRouter.get('/pendingCourses', getPendingCourses)
 adminRouter.get('/archivedCourses', getArchivedCourses)
 adminRouter.get('/contacts', getContacts)
+adminRouter.get('/enrollmentStats', getEnrollmentStats)
 
 
 export default adminRouter

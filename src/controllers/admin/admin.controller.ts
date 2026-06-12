@@ -1,6 +1,6 @@
 
 import { Request, Response } from "express";
-import { assignRoleService, addCategory, getCategory, getCourse, addCourse, activateCourse, deleteCourse, adminGetCourseById, adminGetPendingCourses, adminGetArchivedCourses, adminGetContactMessages, adminGetStatistics, updateCourse } from "./admin.service";
+import { assignRoleService, addCategory, getCategory, getCourse, addCourse, activateCourse, deleteCourse, adminGetCourseById, adminGetPendingCourses, adminGetArchivedCourses, adminGetContactMessages, adminGetStatistics, updateCourse, getAdminDashboardStats } from "./admin.service";
 import { string, success } from "zod";
 import { uploadToCloudinary } from "./cloudinary.service";
 import { prisma } from "../../lib/prisma";
@@ -260,4 +260,19 @@ export const getContacts = async (req: Request, res: Response) => {
     })
   }
 
+}
+
+
+export const getEnrollmentStats = async (req: Request, res: Response) => {
+  try {
+    const stats = await getAdminDashboardStats()
+    res.status(200).json({
+      data: stats,
+      success: true
+    })
+  } catch (error: any) {
+    res.status(400).json({
+      message: error.message, success: false
+    })
+  }
 }
