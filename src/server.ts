@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000;
 async function startServer() {
   try {
     await prisma.$connect();
-    console.log("✅ Database connected to PostgreSQL");
+    console.log("✅ Database connected Successfully");
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

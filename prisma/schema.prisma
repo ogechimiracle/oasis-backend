@@ -4,7 +4,7 @@ generator client {
   engineType ="binary"
 }
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
 }
 
 model User {
@@ -86,10 +86,10 @@ model Course {
   slug            String?      @unique
   briefDefinition String
   prerequisite    String?
-  keyAreas        String[]
-  outcomes        String[]
-  jobRoles        String[]
-  industries      String[]
+  keyAreas        Json
+  outcomes        Json
+  jobRoles        Json
+  industries      Json
   duration        String?
   cost            Int?
   paid            Boolean
